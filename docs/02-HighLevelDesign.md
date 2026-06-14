@@ -681,7 +681,7 @@ Start with one account first. Add more only if you hit free-tier limits or want 
 ## 28. Suggested Repository Structure
 
 ```text
-craftcommerce/
+CraftCommerce/
   src/
     gateway/
       CraftCommerce.Gateway/
@@ -706,7 +706,7 @@ craftcommerce/
     azure/
       container-apps/
       sql/
-  docs/
+    docs/
     craftcommerce-high-level-design.md
   tests/
 ```
