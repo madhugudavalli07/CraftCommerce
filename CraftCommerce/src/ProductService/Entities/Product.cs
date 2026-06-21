@@ -14,5 +14,5 @@ public class Product
 
     public int Stock { get; set; }
 
-    public string ImageUrl { get; set; } = string.Empty;
+    public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
 }

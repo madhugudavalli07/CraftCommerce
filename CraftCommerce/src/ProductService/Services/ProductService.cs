@@ -24,7 +24,7 @@ public class ProductService : IProductService
             Price = request.Price,
             Category = request.Category,
             Stock = request.Stock,
-            ImageUrl = request.ImageUrl
+            Images = CreateImages(request.ImageUrls)
         };
 
         _dbContext.Products.Add(product);
@@ -37,6 +37,7 @@ public class ProductService : IProductService
     {
         var products = await _dbContext.Products
             .AsNoTracking()
+            .Include(p => p.Images)
             .OrderBy(p => p.Name)
             .ToListAsync(cancellationToken);
 
@@ -47,6 +48,7 @@ public class ProductService : IProductService
     {
         var product = await _dbContext.Products
             .AsNoTracking()
+            .Include(p => p.Images)
             .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
 
         return product is null ? null : MapToResponse(product);
@@ -54,7 +56,9 @@ public class ProductService : IProductService
 
     public async Task<ProductResponse?> UpdateAsync(Guid id, CreateProductRequest request, CancellationToken cancellationToken = default)
     {
-        var product = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+        var product = await _dbContext.Products
+            .Include(p => p.Images)
+            .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
         if (product is null)
         {
             return null;
@@ -65,7 +69,8 @@ public class ProductService : IProductService
         product.Price = request.Price;
         product.Category = request.Category;
         product.Stock = request.Stock;
-        product.ImageUrl = request.ImageUrl;
+        _dbContext.ProductImages.RemoveRange(product.Images);
+        product.Images = CreateImages(request.ImageUrls);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
@@ -94,6 +99,19 @@ public class ProductService : IProductService
         Price = product.Price,
         Category = product.Category,
         Stock = product.Stock,
-        ImageUrl = product.ImageUrl
+        ImageUrls = product.Images
+            .OrderBy(image => image.DisplayOrder)
+            .Select(image => image.ImageUrl)
+            .ToList()
     };
+
+    private static List<ProductImage> CreateImages(IEnumerable<string> imageUrls) => imageUrls
+        .Where(imageUrl => !string.IsNullOrWhiteSpace(imageUrl))
+        .Select((imageUrl, index) => new ProductImage
+        {
+            Id = Guid.NewGuid(),
+            ImageUrl = imageUrl.Trim(),
+            DisplayOrder = index
+        })
+        .ToList();
 }
