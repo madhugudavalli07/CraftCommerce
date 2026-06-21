@@ -1,0 +1,39 @@
+@ProductService_HostAddress = http://localhost:5077
+
+POST {{ProductService_HostAddress}}/api/products
+Content-Type: application/json
+
+{
+  "name": "iPhone 16",
+  "description": "Latest Apple Phone",
+  "price": 79999,
+  "category": "Mobiles",
+  "stock": 20,
+  "imageUrl": "abc.jpg"
+}
+
+###
+
+GET {{ProductService_HostAddress}}/api/products
+
+###
+
+GET {{ProductService_HostAddress}}/api/products/{{productId}}
+
+###
+
+PUT {{ProductService_HostAddress}}/api/products/{{productId}}
+Content-Type: application/json
+
+{
+  "name": "iPhone 16 Pro",
+  "description": "Latest Apple Phone",
+  "price": 89999,
+  "category": "Mobiles",
+  "stock": 15,
+  "imageUrl": "abc-pro.jpg"
+}
+
+###
+
+DELETE {{ProductService_HostAddress}}/api/products/{{productId}}
