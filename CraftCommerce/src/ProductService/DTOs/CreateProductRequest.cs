@@ -12,5 +12,5 @@ public class CreateProductRequest
 
     public int Stock { get; set; }
 
-    public string ImageUrl { get; set; } = string.Empty;
+    public List<string> ImageUrls { get; set; } = [];
 }

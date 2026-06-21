@@ -11,6 +11,8 @@ public class ProductDbContext : DbContext
 
     public DbSet<Product> Products => Set<Product>();
 
+    public DbSet<ProductImage> ProductImages => Set<ProductImage>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Product>(entity =>
@@ -31,8 +33,22 @@ public class ProductDbContext : DbContext
                 .IsRequired()
                 .HasMaxLength(100);
 
-            entity.Property(p => p.ImageUrl)
+            entity.HasMany(p => p.Images)
+                .WithOne(i => i.Product)
+                .HasForeignKey(i => i.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<ProductImage>(entity =>
+        {
+            entity.HasKey(i => i.Id);
+
+            entity.Property(i => i.ImageUrl)
+                .IsRequired()
                 .HasMaxLength(500);
+
+            entity.HasIndex(i => new { i.ProductId, i.DisplayOrder })
+                .IsUnique();
         });
     }
 }

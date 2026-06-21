@@ -9,7 +9,11 @@ Content-Type: application/json
   "price": 79999,
   "category": "Mobiles",
   "stock": 20,
-  "imageUrl": "abc.jpg"
+  "imageUrls": [
+    "abc-front.jpg",
+    "abc-back.jpg",
+    "abc-side.jpg"
+  ]
 }
 
 ###
@@ -31,7 +35,10 @@ Content-Type: application/json
   "price": 89999,
   "category": "Mobiles",
   "stock": 15,
-  "imageUrl": "abc-pro.jpg"
+  "imageUrls": [
+    "abc-pro-front.jpg",
+    "abc-pro-back.jpg"
+  ]
 }
 
 ###
